@@ -6,6 +6,8 @@
         public string DiscountCode { get; set; }
         public int? DiscountRate { get; set; }
         public List<BasketItemDto> BasketItems { get; set; }
-        public decimal TotalPrice { get => BasketItems.Sum(x => x.Price * x.Quantity); }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public decimal TotalPrice => BasketItems.Sum(x => x.Price * x.Quantity)
+        * (DiscountRate.HasValue ? (100 - DiscountRate.Value) / 100m : 1m);
     }
 }
